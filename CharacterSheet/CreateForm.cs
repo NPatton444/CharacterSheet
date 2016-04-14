@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using System.Xml;
 
 namespace CharacterSheet
 {
@@ -165,5 +166,27 @@ namespace CharacterSheet
             Close();
         }
 
+        private void CreateForm_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            XmlTextWriter writer = new XmlTextWriter("characters.xml", null);
+
+            //Write the Employee "employee start element
+            writer.WriteStartElement("Characters");
+
+            foreach (Character character in MainForm.characterDB)
+            {
+                writer.WriteStartElement("Character");
+
+                writer.WriteElementString("name", character.name);
+                writer.WriteElementString("HeroClass", character.charClass);
+                writer.WriteElementString("Dexterity", character.dexterity);
+                writer.WriteElementString("Strength", character.strength);
+                writer.WriteElementString("Health", character.health);
+                writer.WriteElementString("Perk", character.perk);
+
+                writer.WriteEndElement();
+            }
+            writer.Close();
+        }
     }
 }
